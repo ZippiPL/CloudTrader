@@ -5,208 +5,229 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
+enum FormType { sets, boxs,atomizers,liquids }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  FormType _formType = FormType.liquids;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(214, 214, 214, 1),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(
-                    height: 180.0,
-                    width: double.infinity,
-                    color: Colors.lightBlue,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Row(
-                        children: <Widget>[
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width - 60.0),
-                          Container(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              icon: Icon(Icons.menu),
-                              onPressed: () {},
-                              color: Colors.white,
-                              iconSize: 30.0,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 0.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 15.0),
-                        child: Text(
-                          ' Cloud Trade',
-                          style: TextStyle(
-                              fontFamily: 'Quicksand',
-                              fontSize: 30.0,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 35.0),
-                        child: Text(
-                          ' Czego dzisiaj szukasz ?',
-                          style: TextStyle(
-                              fontFamily: 'Quicksand',
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: Material(
-                          elevation: 5.0,
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              prefixIcon: Icon(Icons.search,
-                                  color: Colors.blueGrey, size: 30.0),
-                              contentPadding:
-                                  EdgeInsets.only(left: 30, top: 15),
-                              hintText: 'Szukaj',
-                              hintStyle: TextStyle(
-                                color: Colors.grey,
-                                fontFamily: 'Quicksand',
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10.0),
-                    ],
-                  )
-                ],
-              ),
-              SizedBox(height: 15.0),
-              Stack(
-                children: <Widget>[
-                  SizedBox(height: 10.0),
-                  Material(
-                    elevation: 1.0,
-                    child: Container(
-                      height: 75.0,
-                      color: Colors.white,
+      backgroundColor: Color.fromRGBO(149, 185, 199, 10),
+      body: Form(
+              key: _formKey,
+              child: ListView(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Stack(
+                  children: <Widget>[
+                    Container(
+                      height: 180.0,
+                      width: double.infinity,
+                      color: Colors.lightBlue,
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Container(
-                        height: 75.0,
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Row(
                           children: <Widget>[
+                            SizedBox(
+                                width: MediaQuery.of(context).size.width - 60.0),
                             Container(
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/set.png'),
-                                ),
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                icon: Icon(Icons.menu),
+                                onPressed: () {},
+                                color: Colors.lightBlue,
+                                iconSize: 30.0,
                               ),
-                            ),
-                            Text(
-                              'Zestawy',
-                              style: TextStyle(fontFamily: 'Quicksand'),
                             ),
                           ],
                         ),
-                      ),
-                      Container(
-                        height: 75.0,
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/mod.png'),
+                        SizedBox(
+                          height: 0.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.0),
+                          child: Text(
+                            ' Cloud Trade',
+                            style: TextStyle(
+                                fontFamily: 'Quicksand',
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 35.0),
+                          child: Text(
+                            ' Czego dzisiaj szukasz ?',
+                            style: TextStyle(
+                                fontFamily: 'Quicksand',
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: Material(
+                            elevation: 5.0,
+                            borderRadius: BorderRadius.circular(5.0),
+                            child: TextFormField(
+                              decoration: InputDecoration(
+                                border: InputBorder.none,
+                                prefixIcon: Icon(Icons.search,
+                                    color: Colors.blueGrey, size: 30.0),
+                                contentPadding:
+                                    EdgeInsets.only(left: 30, top: 15),
+                                hintText: 'Szukaj',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontFamily: 'Quicksand',
                                 ),
                               ),
                             ),
-                            Text(
-                              'Boxy',
-                              style: TextStyle(fontFamily: 'Quicksand'),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Container(
+                        SizedBox(height: 10.0),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 15.0),
+                Stack(
+                  children: <Widget>[
+                    SizedBox(height: 10.0),
+                    Material(
+                      elevation: 1.0,
+                      child: Container(
                         height: 75.0,
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/atom2.jpg'),
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Container(
+                          height: 75.0,
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/set.png'),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              'Atomizery',
-                              style: TextStyle(fontFamily: 'Quicksand'),
-                            ),
-                          ],
+                              Text(
+                                'Zestawy',
+                                style: TextStyle(fontFamily: 'Quicksand'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
-                        height: 75.0,
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage('assets/images/bottle.png'),
+                        Container(
+                          height: 75.0,
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/mod.png'),
+                                  ),
                                 ),
                               ),
-                            ),
-                            Text(
-                              'Liquidy',
-                              style: TextStyle(fontFamily: 'Quicksand'),
-                            ),
-                          ],
+                              Text(
+                                'Boxy',
+                                style: TextStyle(fontFamily: 'Quicksand'),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
-              itemCard('VapeMons GearBox', 'assets/images/VapeMons.jpg', true),
-              itemCard('Vandy Vape APOLLO ', 'assets/images/apollo.jpg', false),
-            ],
-          )
-        ],
+                        Container(
+                          height: 75.0,
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/atom2.jpg'),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Atomizery',
+                                style: TextStyle(fontFamily: 'Quicksand'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 75.0,
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/bottle.png'),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'Liquidy',
+                                style: TextStyle(fontFamily: 'Quicksand'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+                
+               
+                itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
+                itemCard('VapeMons GearBox', 'assets/images/VapeMons.jpg', true),
+                itemCard('Vandy Vape APOLLO ', 'assets/images/apollo.jpg', false),
+                  itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
+                itemCard('VapeMons GearBox', 'assets/images/VapeMons.jpg', true),
+                itemCard('Vandy Vape APOLLO ', 'assets/images/apollo.jpg', false),
+                  itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
+                itemCard('VapeMons GearBox', 'assets/images/VapeMons.jpg', true),
+                itemCard('Vandy Vape APOLLO ', 'assets/images/apollo.jpg', false),
+                  itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
+                itemCard('VapeMons GearBox', 'assets/images/VapeMons.jpg', true),
+                itemCard('Vandy Vape APOLLO ', 'assets/images/apollo.jpg', false),
+                        
+              ],
+            )
+          ],
+        ),
       ),
       floatingActionButton:FloatingActionButton(child: Text('+',style: TextStyle(fontSize: 30),),onPressed: (){
         
       },backgroundColor: Colors.red,),
     );
+
+    List<Widget> buildSubmitButtons(){}
+
   }
 
   Widget itemCard(String title, String imgPath, bool isFavourite) {
@@ -257,10 +278,10 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: Center(
                             child: isFavourite
                                 ? Icon(
-                                    Icons.favorite,
+                                    Icons.report,
                                     color: Colors.red,
                                   )
-                                : Icon(Icons.favorite_border)),
+                                : Icon(Icons.report,color:Colors.red,)),
                       ),
                     )
                   ],
