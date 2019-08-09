@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class CustomInputField extends StatelessWidget{
+class CustomInputFieldShort extends StatelessWidget{
   TextEditingController _controller;
   Icon fieldIcon;
   String hintText;
   String validator;
   bool _obscureText;
   String value;
-  double szerokosc;
-  CustomInputField(this.szerokosc,this.fieldIcon,this.hintText, this.validator,this._obscureText,this._controller);
+  double szerokosc,widthsze;
+  CustomInputFieldShort(this.widthsze,this.szerokosc,this.fieldIcon,this.hintText, this.validator,this._obscureText,this._controller);
 
 
   @override
@@ -16,23 +16,20 @@ class CustomInputField extends StatelessWidget{
     
     // TODO: implement build
     return Container(
-      width: 250,
+      width: widthsze,
       child: Material(
           elevation: 5.0,
           borderRadius: BorderRadius.all(Radius.circular(10.0)),
           //color: Colors.lightBlue,
-         color: Color.fromRGBO(0  , 174, 250, 10),
+         
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: fieldIcon,
-              ),
+             
               Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.only(topRight: Radius.circular(10.0),bottomRight: Radius.circular(10.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 width: szerokosc,
                 height: 60,

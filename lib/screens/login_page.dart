@@ -1,53 +1,64 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:vapestore/customwidgets/custominputfield.dart';
 import 'package:vapestore/screens/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toast/toast.dart';
-
+import 'package:vapestore/screens/list.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'additem_page.dart';
+import 'connection.dart';
+import 'image_slider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => new _LoginPageState();
 }
 
-
 enum FormType { login, register }
 
 class _LoginPageState extends State<LoginPage> {
+  final databaseReference =
+      FirebaseDatabase.instance.reference().child("users");
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final myControllerEmail = TextEditingController();
   final myControllerPassword = TextEditingController();
   TextEditingController _emailFieldController;
   TextEditingController _passwordFieldController;
   TextEditingController _nicklFieldController;
-  
+
   String _email;
   String _password;
   String _loginname;
   FormType _formType = FormType.login;
 
-  void _showToast(String toastText){
-  Toast.show("${toastText}", context, duration: Toast.LENGTH_LONG, gravity:  Toast.BOTTOM);
+  void _showToast(String toastText) {
+    Toast.show("${toastText}", context,
+        duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
   }
 
+  registerIn() {}
+
   void signIn() async {
-     _showToast("Weyfikacja w toku...");
-     _emailFieldController=new TextEditingController(text:myControllerEmail.text);
-     _passwordFieldController=new TextEditingController(text: myControllerPassword.text);
-    _email=_emailFieldController.text;
-    _password=_passwordFieldController.text;
+    _showToast("Weyfikacja w toku...");
+    _emailFieldController =
+        new TextEditingController(text: myControllerEmail.text);
+    _passwordFieldController =
+        new TextEditingController(text: myControllerPassword.text);
+    _email = _emailFieldController.text;
+    _password = _passwordFieldController.text;
     final formState = _formKey.currentState;
-    
-    
+
     if (formState.validate()) {
       formState.save();
       try {
         //login
-       
+
         if (_formType == FormType.login) {
           print("email =${_email}");
-         print("password =${_password}");
-        
+          print("password =${_password}");
+
           FirebaseUser user = (await FirebaseAuth.instance
                   .signInWithEmailAndPassword(
                       email: _email, password: _password))
@@ -57,11 +68,16 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.push(
               context, MaterialPageRoute(builder: (context) => MyHomePage()));
         } else {
-           _showToast("Rejestracja w toku...");
+          _showToast("Rejestracja w toku...");
           FirebaseUser user = (await FirebaseAuth.instance
                   .createUserWithEmailAndPassword(
                       email: _email, password: _password))
               .user;
+          databaseReference.push().set({
+            'email': '${_email}',
+            'password': '${_password}',
+            'nick': 'Test'
+          });
           print('Registered user: ${user.uid}');
         }
       } catch (e) {
@@ -69,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-  
+
   void moveToRegister() {
     _formKey.currentState.reset();
     setState(() {
@@ -84,10 +100,16 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  //
+  void moveToList() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddItemPage()));
+  }
+
+//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       //backgroundColor:Color.fromRGBO(214, 214, 214,5),
       backgroundColor: Color.fromRGBO(149, 185, 199, 10),
       /* appBar: new AppBar(
@@ -119,6 +141,15 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: buildInputs() + buildSubmitButtons(),
                 ),
+                //
+                Container(
+                  child: FlatButton(
+                    child: Text('TestingButton'),
+                    color: Colors.red,
+                    onPressed: moveToList,
+                  ),
+                )
+                //
               ],
             ),
           )),
@@ -127,11 +158,13 @@ class _LoginPageState extends State<LoginPage> {
 
   List<Widget> buildInputs() {
     return [
-      CustomInputField(Icon(Icons.person), 'Email', _email, false,myControllerEmail),
+      CustomInputField(
+          330, Icon(Icons.person), 'Email', _email, false, myControllerEmail),
       SizedBox(
         height: 10.0,
       ),
-      CustomInputField(Icon(Icons.lock), 'Haslo', _password, true,myControllerPassword),
+      CustomInputField(330, Icon(Icons.lock), 'Haslo', _password, true,
+          myControllerPassword),
       SizedBox(
         height: 10.0,
       ),
@@ -161,8 +194,8 @@ class _LoginPageState extends State<LoginPage> {
       ];
     } else {
       return [
-        CustomInputField(
-            Icon(Icons.people_outline), 'Nazwa Użytkownika', _loginname, false,_nicklFieldController),
+        CustomInputField(330, Icon(Icons.people_outline), 'Nazwa Użytkownika',
+            _loginname, false, _nicklFieldController),
         SizedBox(
           height: 10.0,
         ),

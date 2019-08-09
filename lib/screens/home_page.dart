@@ -10,6 +10,19 @@ enum FormType { sets, boxs,atomizers,liquids }
 class _MyHomePageState extends State<MyHomePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   FormType _formType = FormType.liquids;
+  PageController pageController;
+  List<String> images = [
+    'assets/images/cloudtrader.png',
+    'assets/images/ehpro.jpg',
+    'assets/images/VapeMons.jpg',
+  ];
+
+   @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: 1, viewportFraction: 0.8);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -226,7 +239,6 @@ class _MyHomePageState extends State<MyHomePage> {
       },backgroundColor: Colors.red,),
     );
 
-    List<Widget> buildSubmitButtons(){}
 
   }
 
