@@ -142,8 +142,8 @@ class _AddItemPage extends State<AddItemPage> {
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
                     child: Column(
                       children: <Widget>[
-                        CustomInputField(210, Icon(Icons.textsms),
-                            'Nazwa Produktu', null, false, null),
+                        CustomInputField(210, Icon(Icons.text_format),
+                            'Nazwa Produktu', _productName, false, myControllerProductName),
                         SizedBox(
                           height: 10.0,
                         ),
