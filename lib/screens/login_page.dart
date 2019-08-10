@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final myControllerEmail = TextEditingController();
   final myControllerPassword = TextEditingController();
+  final myControllernick = TextEditingController();
   TextEditingController _emailFieldController;
   TextEditingController _passwordFieldController;
   TextEditingController _nicklFieldController;
@@ -42,12 +43,14 @@ class _LoginPageState extends State<LoginPage> {
 
   void signIn() async {
     _showToast("Weyfikacja w toku...");
-    _emailFieldController =
-        new TextEditingController(text: myControllerEmail.text);
+    _emailFieldController =  new TextEditingController(text: myControllerEmail.text);
+    _nicklFieldController = new TextEditingController(text:myControllernick.text);
     _passwordFieldController =
         new TextEditingController(text: myControllerPassword.text);
     _email = _emailFieldController.text;
     _password = _passwordFieldController.text;
+    _loginname = _nicklFieldController.text;
+
     final formState = _formKey.currentState;
 
     if (formState.validate()) {
@@ -76,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
           databaseReference.push().set({
             'email': '${_email}',
             'password': '${_password}',
-            'nick': 'Test'
+            'nick': '${_loginname}'
           });
           print('Registered user: ${user.uid}');
         }
@@ -195,7 +198,7 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       return [
         CustomInputField(330, Icon(Icons.people_outline), 'Nazwa Użytkownika',
-            _loginname, false, _nicklFieldController),
+            _loginname, false, myControllernick),
         SizedBox(
           height: 10.0,
         ),
