@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vapestore/screens/additem_page.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -235,7 +236,10 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton:FloatingActionButton(child: Text('+',style: TextStyle(fontSize: 30),),onPressed: (){
-        
+
+        Navigator.push(
+        context, MaterialPageRoute(builder: (context) => AddItemPage()));
+
       },backgroundColor: Colors.red,),
     );
 

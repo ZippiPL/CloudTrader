@@ -36,6 +36,7 @@ class CustomInputFieldShort extends StatelessWidget{
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
+                  keyboardType: TextInputType.number,
                  controller: _controller,
                   obscureText:_obscureText,
                   validator: (value) => value.isEmpty ? 'Pole Nie Może być puste' : null,

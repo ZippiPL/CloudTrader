@@ -9,7 +9,7 @@ class CustomInputField extends StatelessWidget{
   String value;
   double szerokosc;
   CustomInputField(this.szerokosc,this.fieldIcon,this.hintText, this.validator,this._obscureText,this._controller);
-
+  
 
   @override
   Widget build(BuildContext context) {

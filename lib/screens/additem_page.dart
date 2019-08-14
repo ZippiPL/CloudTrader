@@ -6,6 +6,10 @@ import 'package:toast/toast.dart';
 import 'package:vapestore/screens/list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'additem_page.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+import 'package:vapestore/customwidgets/addpicture.dart';
 
 class AddItemPage extends StatefulWidget {
   @override
@@ -19,17 +23,42 @@ class _AddItemPage extends State<AddItemPage> {
   bool pressAttention3 = false;
   bool pressAttention4 = false;
 //oroperties//
-  String _productType="Set";
+  String _productType = "Set";
   int groupValue = 0;
   String _productName;
   String _localisation;
-  double _price;
-  int _number;
+  String _price;
+  String _number;
   String _description;
+  String zdj1_productanme;
+  String zdj2_productanme;
+  String zdj3_productanme;
+  String zdj4_productanme;
+
+  //
+  var zdj1 = AddPicture();
+  var zdj2 = AddPicture();
+  var zdj3 = AddPicture();
+  var zdj4 = AddPicture();
+  File _image;
 //connection
+ createNameForImage(String _productName){
+zdj1_productanme=_productName+'1';
+zdj2_productanme=_productName+'2';
+zdj3_productanme=_productName+'3';
+zdj4_productanme=_productName+'4';
+
+ }
+
+//
   final databaseReferenceSet =
       FirebaseDatabase.instance.reference().child("products").child("Sets");
-
+  final databaseReferenceBox =
+      FirebaseDatabase.instance.reference().child("products").child("Box");
+  final databaseReferenceAtom =
+      FirebaseDatabase.instance.reference().child("products").child("Atomizer");
+  final databaseReferenceLiquid =
+      FirebaseDatabase.instance.reference().child("products").child("Liquid");
   final GlobalKey<FormState> _formKeyItem = GlobalKey<FormState>();
   final myControllerProductName = TextEditingController();
   final myControllerLocalisation = TextEditingController();
@@ -55,7 +84,7 @@ class _AddItemPage extends State<AddItemPage> {
         groupValue = 2;
       } else if (e == 3) {
         groupValue = 3;
-        _productType = 'Atom';
+        _productType = 'Atomizer';
       } else if (e == 4) {
         _productType = 'Liquid';
         groupValue = 4;
@@ -68,8 +97,16 @@ class _AddItemPage extends State<AddItemPage> {
         duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
   }
 
+  //Future getImage() async {
+  //   var tempImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+  //  setState((){
+  //    _image=tempImage;
+  //     print('Image Path $_image');
+  //  });}
+
   _addItemToFirebase() {
 //wycaiganie tekstu
+
     _showToast("Dodawanie Przedmiotu");
     //
     _productNameFieldController =
@@ -80,31 +117,68 @@ class _AddItemPage extends State<AddItemPage> {
         new TextEditingController(text: myControllerPrice.text);
     _numberFieldController =
         new TextEditingController(text: myControllerNumber.text);
-   // _producttypeFieldController =
-   //     new TextEditingController(text: myControllerProductType.text);
+    _producttypeFieldController =
+        new TextEditingController(text: myControllerProductType.text);
     _descriptioneFieldController =
         new TextEditingController(text: myControllerDescription.text);
     //
     _productName = _productNameFieldController.text;
     _localisation = _localisationFieldController.text;
-    //_price = double.parse(_priceFieldController.text);
-    //_number = int.parse(_numberFieldController.text);
-   // _productType = _producttypeFieldController.text;
+    _price = _priceFieldController.text;
+    _number = _numberFieldController.text;
+
+    // _productType = _producttypeFieldController.text;
     _description = _descriptioneFieldController.text;
     final formState = _formKeyItem.currentState;
 
     if (formState.validate()) {
       formState.save();
       try {
-        databaseReferenceSet.push().set({
-          'Nazwa Produktu': '${_productName}',
-          'Lokalizacja': '${_localisation}',
-          //      'Cena': '${_price}',
-          //      'Numer': '${_number}',
-          'Typ produktu': '${_productType}',
-          'Opis': '${_description}'
-        });
-        print('Poszlo');
+        //final StorageReference firebaseStorageRef= FirebaseStorage.instance.ref().child('image1.jpg');
+        //  final StorageUploadTask task = firebaseStorageRef.putFile(_image);
+        if (_productType == 'Set') {
+          databaseReferenceSet.push().set({
+            'Nazwa Produktu': '${_productName}',
+            'Lokalizacja': '${_localisation}',
+            'Cena': '${_price}',
+            'Numer': '${_number}',
+            'Typ produktu': '${_productType}',
+            'Opis': '${_description}'
+          });
+          print('Poszlo Do Setow');
+        } else if (_productType == 'Box') {
+          databaseReferenceBox.push().set({
+            'Nazwa Produktu': '${_productName}',
+            'Lokalizacja': '${_localisation}',
+            'Cena': '${_price}',
+            'Numer': '${_number}',
+            'Typ produktu': '${_productType}',
+            'Opis': '${_description}'
+          });
+
+          print('Poszlo Do Boxow');
+        } else if (_productType == 'Atomizer') {
+          databaseReferenceAtom.push().set({
+            'Nazwa Produktu': '${_productName}',
+            'Lokalizacja': '${_localisation}',
+            'Cena': '${_price}',
+            'Numer': '${_number}',
+            'Typ produktu': '${_productType}',
+            'Opis': '${_description}'
+          });
+
+          print('Poszlo do Atomizer');
+        } else if (_productType == 'Liquid') {
+          databaseReferenceLiquid.push().set({
+            'Nazwa Produktu': '${_productName}',
+            'Lokalizacja': '${_localisation}',
+            'Cena': '${_price}',
+            'Numer': '${_number}',
+            'Typ produktu': '${_productType}',
+            'Opis': '${_description}'
+          });
+          print('Poszlo Do Liquid');
+        }
       } catch (e) {
         print('Error $e');
       }
@@ -142,8 +216,13 @@ class _AddItemPage extends State<AddItemPage> {
                     padding: EdgeInsets.only(left: 15.0, right: 15.0),
                     child: Column(
                       children: <Widget>[
-                        CustomInputField(210, Icon(Icons.text_format),
-                            'Nazwa Produktu', _productName, false, myControllerProductName),
+                        CustomInputField(
+                            210,
+                            Icon(Icons.text_format),
+                            'Nazwa Produktu',
+                            _productName,
+                            false,
+                            myControllerProductName),
                         SizedBox(
                           height: 10.0,
                         ),
@@ -178,9 +257,9 @@ class _AddItemPage extends State<AddItemPage> {
                                 150,
                                 Icon(Icons.people_outline),
                                 'Telefon',
-                                null,
+                                _number,
                                 false,
-                                null),
+                                myControllerNumber),
                             SizedBox(
                               width: 10.0,
                             ),
@@ -189,9 +268,9 @@ class _AddItemPage extends State<AddItemPage> {
                                 90,
                                 Icon(Icons.people_outline),
                                 'Cena',
-                                null,
+                                _price,
                                 false,
-                                null),
+                                myControllerPrice),
                           ],
                         ),
                         SizedBox(
@@ -224,6 +303,7 @@ class _AddItemPage extends State<AddItemPage> {
                                             ? Colors.red
                                             : Colors.green,
                                         onPressed: () {
+                                          zdj1.getImage();
                                           setState(() => pressAttention1 =
                                               !pressAttention1);
                                         },
@@ -256,6 +336,7 @@ class _AddItemPage extends State<AddItemPage> {
                                             ? Colors.red
                                             : Colors.green,
                                         onPressed: () {
+                                          zdj2.getImage();
                                           setState(() => pressAttention2 =
                                               !pressAttention2);
                                         },
@@ -281,8 +362,11 @@ class _AddItemPage extends State<AddItemPage> {
                                         color: pressAttention3
                                             ? Colors.red
                                             : Colors.green,
-                                        onPressed: () => setState(() =>
-                                            pressAttention3 = !pressAttention3),
+                                        onPressed: () {
+                                          zdj3.getImage();
+                                          setState(() => pressAttention3 =
+                                              !pressAttention3);
+                                        },
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 new BorderRadius.circular(
@@ -305,8 +389,11 @@ class _AddItemPage extends State<AddItemPage> {
                                         color: pressAttention4
                                             ? Colors.red
                                             : Colors.green,
-                                        onPressed: () => setState(() =>
-                                            pressAttention4 = !pressAttention4),
+                                        onPressed: () {
+                                          zdj4.getImage();
+                                          setState(() => pressAttention4 =
+                                              !pressAttention4);
+                                        },
                                         shape: RoundedRectangleBorder(
                                             borderRadius:
                                                 new BorderRadius.circular(
@@ -443,7 +530,14 @@ class _AddItemPage extends State<AddItemPage> {
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                     ),
-                    onPressed: _addItemToFirebase,
+                    onPressed: () {
+                      _addItemToFirebase();
+                      createNameForImage(_productName);
+                      zdj1.uploadPic(_productName,zdj1_productanme);
+                      zdj2.uploadPic(_productName,zdj2_productanme);
+                      zdj3.uploadPic(_productName,zdj3_productanme);
+                      zdj4.uploadPic(_productName,zdj4_productanme);
+                    },
                     shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(10.0))),
               ),
@@ -457,4 +551,6 @@ class _AddItemPage extends State<AddItemPage> {
       backgroundColor: Color.fromRGBO(149, 185, 199, 10),
     );
   }
+
+  Widget enableUpload() {}
 }
