@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
 import 'package:flutter/material.dart';
+import 'package:vapestore/Classes/SpecificObjectDisplay.dart';
 import 'package:vapestore/customwidgets/custominputfield.dart';
 import 'package:vapestore/customwidgets/custominputfieldshort.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,39 +21,102 @@ class DisplayOffert extends StatefulWidget {
 
 class _DisplayOffert extends State<DisplayOffert> {
 //
-final databaseReference =
-      FirebaseDatabase.instance.reference().child('products').child('Box').orderByChild('Opis');
-     
-     
-     
+String tytul='Loading';
+String opis='Loading';
+String cena='Loading';
+String kontakt='Loading';
+var item  ;
+ String elotext='elo';
+  final databaseReferenceBox =
+      FirebaseDatabase.instance.reference().child('products').child('Box').limitToFirst(1);
+  final Query queryBox =
+      FirebaseDatabase.instance.reference().child('products').child('Box');
+  final databaseReferenceAtom =
+      FirebaseDatabase.instance.reference().child('products').child('Atomizer');
+  final Query queryAtom =
+      FirebaseDatabase.instance.reference().child('products').child('Atomizer');
 //
 
-readData(){
-  databaseReference.once().then((DataSnapshot dataSnapShot){
-      Map<dynamic,dynamic>values=dataSnapShot.value['Opis'];
+//
+   
+  var _opis;
+  readDataBox() async {
+    databaseReferenceBox.once().then((DataSnapshot dataSnapShot) {
+    
+        databaseReferenceBox.onChildAdded.listen((e){
+          DataSnapshot data = e.snapshot;
+          var val = data.value;
+          item = new ObiektOferty(data.key,val[nameJ].toString(),val[localisationJ].toString(),val[descriptionJ].toString(),val[numberJ].toString(),val[priceJ].toString(),val[producttypeJ].toString());
+          _showItem(item);
+           _updateOffertItem(item);
+        }
+        
+        );
+    });
+  }
+  _updateOffertItem(ObiektOferty item)async{
+    print('_updateOffertItem');
+    print("Nazwa = ${item.name} ");
+    setState(() {
+      tytul = item.name;
+      opis=item.description;
+      cena=item.price;
+      kontakt=item.number;
+
+    });
+  }
+ _showItem(ObiektOferty item)async {
+     print('_ShowItem');
+     print("Przedmiot 1");
+    print("Nazwa = ${item.name} ");
+     print("Lokalizacja = ${item.localisation}");
+      print("Opis = ${item.description}");
+       print("Numer = ${item.number} ");
+        print("Cena = ${item.price} ");
+         print("Typ = ${item.producttype} ");
+  }
+  // Future<List<ObiektOferty>>fetchObiektOferty(HttpClient client) async{
+    // final response = await client.get(host, port, path)
+  // }
+   
+  readDataAtom() {
+    databaseReferenceAtom.once().then((DataSnapshot dataSnapShot) {
+      print(databaseReferenceAtom.equalTo('Opis'));
+      // Map<dynamic,dynamic>values=dataSnapShot.value['Opis'];
       print(dataSnapShot.value);
       print('     ');
-      print(values['Opis']);
-  });
-
-}
+      elotext='Atom';
+      setState(() {
+       build(context); 
+      });
+      // print(values['Opis']);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+
+  readDataBox();
+  
+  
     return Scaffold(
       appBar: AppBar(
         title: Text('Elo'),
       ),
       body: ListView(
         children: <Widget>[
-        
           RaisedButton(
-            child: Text('ELO'),
+            child: Text('Box'),
             color: Colors.red,
-            onPressed: readData,
+            onPressed: readDataBox,
           ),
-          Text('elo'),
-          itemCard('EHPRO COLD STEEL', 'assets/images/ehpro.jpg', false),
+          RaisedButton(
+            child: Text('Atom'),
+            color: Colors.blue,
+            onPressed: readDataAtom,
+          ),
+          Text('Tekst = ${elotext.toString()}'),
+          itemCard('${tytul.toString()}', 'assets/images/ehpro.jpg', false),
         ],
       ),
     );
@@ -120,7 +187,7 @@ readData(){
                 Container(
                     width: 175.0,
                     child: Text(
-                      'Scandinavian small sized double sofa imported full leather / Dale Italia oil wax leather black',
+                      '${opis.toString()}',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           fontFamily: 'Quicksand',
@@ -139,7 +206,7 @@ readData(){
                       color: Colors.lightBlue,
                       child: Center(
                         child: Text(
-                          '59.99',
+                          '${cena.toString()}',
                           style: TextStyle(
                               fontSize: 13,
                               color: Colors.white,
@@ -152,7 +219,7 @@ readData(){
                       width: 100,
                       color: Colors.lightBlueAccent,
                       child: Center(
-                        child: Text('Kontakt'),
+                        child: Text('${kontakt.toString()}'),
                       ),
                     )
                   ],
