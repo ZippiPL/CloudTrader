@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart' as prefix0;
@@ -8,6 +7,7 @@ import 'package:vapestore/customwidgets/custominputfield.dart';
 import 'package:vapestore/customwidgets/custominputfieldshort.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toast/toast.dart';
+import 'package:vapestore/customwidgets/displayItemCard.dart';
 import 'package:vapestore/screens/list.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,15 +15,15 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 import 'package:vapestore/customwidgets/addpicture.dart';
 
-import 'displayItemCard.dart';
-
-class DisplayOffert extends StatefulWidget {
+class Test extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => new _DisplayOffert();
+  State<StatefulWidget> createState() => new _Test();
 }
 
-class _DisplayOffert extends State<DisplayOffert> {
+class _Test extends State<Test> {
+  Stream _myStream;
 //
+ 
   String tytul = 'Loading';
   String opis = 'Loading';
   String cena = 'Loading';
@@ -34,18 +34,10 @@ class _DisplayOffert extends State<DisplayOffert> {
       FirebaseDatabase.instance.reference().child('products').child('Box');
   final Query queryBox =
       FirebaseDatabase.instance.reference().child('products').child('Box');
-  final databaseReferenceAtom =
-      FirebaseDatabase.instance.reference().child('products').child('Atomizer');
-  final Query queryAtom =
-      FirebaseDatabase.instance.reference().child('products').child('Atomizer');
-//
 
-//
-
-  var _opis;
- readDataBox() async {
-      databaseReferenceBox.once().then((DataSnapshot dataSnapShot) {
-     await databaseReferenceBox.onChildAdded.listen((e) {
+  readDataBox() async {
+    databaseReferenceBox.once().then((DataSnapshot dataSnapShot) {
+      databaseReferenceBox.onChildAdded.listen((e) {
         DataSnapshot data = e.snapshot;
         var val = data.value;
         item = new ObiektOferty(
@@ -56,11 +48,10 @@ class _DisplayOffert extends State<DisplayOffert> {
             val[numberJ].toString(),
             val[priceJ].toString(),
             val[producttypeJ].toString());
-      }
-      );
+        _showItem(item);
+        _updateOffertItem(item);
+      });
     });
-    _showItem(item);
-    _updateOffertItem(item);
   }
 
   _updateOffertItem(ObiektOferty item) async {
@@ -82,39 +73,18 @@ class _DisplayOffert extends State<DisplayOffert> {
     print("Opis = ${item.description}");
     print("Numer = ${item.number} ");
     print("Cena = ${item.price} ");
-    print("Typ = ${item.producttype} ");
-  }
-  // Future<List<ObiektOferty>>fetchObiektOferty(HttpClient client) async{
-  // final response = await client.get(host, port, path)
-  // }
-
-  readDataAtom() {
-    databaseReferenceAtom.once().then((DataSnapshot dataSnapShot) {
-      print(databaseReferenceAtom.equalTo('Opis'));
-      // Map<dynamic,dynamic>values=dataSnapShot.value['Opis'];
-      print(dataSnapShot.value);
-      print('     ');
-      elotext = 'Atom';
-      setState(() {
-        build(context);
-      });
-      // print(values['Opis']);
-    });
   }
 
-  printWait(int ile) {
-    new Timer(Duration(seconds: ile), () => connect(ile));
-  }
-
-  connect(int ile) {
-    print('Czekalem${ile}');
-    readDataBox();
-  }
+ /* Future<List<ObiektOferty>> _getObjects() async {
+    List<ObiektOferty>  obiekty = [];
+    for(var u  in jsonData){
+      ObiektOferty obiekt = ObiektOferty();
+      obiekty.add(obiekt);
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    readDataBox();
-    printWait(1);
     return Scaffold(
       backgroundColor: Color.fromRGBO(149, 185, 199, 10),
       appBar: AppBar(
@@ -127,14 +97,32 @@ class _DisplayOffert extends State<DisplayOffert> {
             color: Colors.red,
             onPressed: readDataBox,
           ),
-          RaisedButton(
-            child: Text('Atom'),
-            color: Colors.blue,
-            onPressed: readDataAtom,
+          ListView.builder(
+            itemCount: 20,
+            itemBuilder: (context,index){
+             // final item=items[index];
+            },
           ),
-          Text('Tekst = ${elotext.toString()}'),
-          itemCardd(tytul.toString(), opis.toString(), cena.toString(),
-              kontakt.toString(), 'assets/images/ehpro.jpg', false),
+         StreamBuilder(
+            stream: queryBox.onValue,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                  return Text('Select lot');
+                case ConnectionState.waiting:
+                  return Text('Awaiting bids...');
+                case ConnectionState.active:
+                  return Row(children: <Widget>[Text('Aktywbyku\$${snapshot.data}'),
+                  // readDataBox(),
+                  // itemCardd(tytul.toString(),opis.toString(),cena.toString(),kontakt.toString(), 'assets/images/ehpro.jpg',false),
+                  ]);
+                case ConnectionState.done:
+                  return Text('Done byku\$${snapshot.data} (closed)');
+              }
+            },
+          )
+
         ],
       ),
     );

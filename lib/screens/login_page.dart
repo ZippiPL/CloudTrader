@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:toast/toast.dart';
 import 'package:vapestore/screens/list.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:vapestore/screens/test.dart';
 import 'adding_picture.dart';
 import 'additem_page.dart';
 import 'connection.dart';
@@ -215,6 +216,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         new FlatButton(
+          
           child: new Text('Masz już konto ? Zaloguj',
               style: new TextStyle(fontSize: 20.0, color: Colors.white)),
           onPressed: moveToLogin,

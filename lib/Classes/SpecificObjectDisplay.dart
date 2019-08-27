@@ -37,15 +37,5 @@ class ObiektOferty {
   String getItemName(){
     return name;
   }
-/*
-  Map<String , dynamic> toJson(){
-    return{
-      'Nazwa Produktu':name,
-      'Opis':description,
-      'Cena':price,
-      'Numer':number,
-      'Typ produktu':producttype,
-      'Lokalizacja':localisation,
-    };
-  }*/
+
 }
